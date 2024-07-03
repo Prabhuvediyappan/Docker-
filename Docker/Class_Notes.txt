@@ -1,0 +1,761 @@
+AWS & DevOps | SA2402021 |
+
+######################
+Day 1 - 7th June 2024
+######################
+
+Containerization using Docker :::
+
+
+	DevOps :::
+	
+		Various Stages of DevOps ?
+		
+		Stages of DevOps :
+		
+			CI / CD 
+			
+			Continous Integration and Continous Delivery/Deployment
+			
+			Developer ::
+			
+				Dev Environment :
+					Create Source Code 	# Local Machine using Eclipse IDE/Unit Test/Tomcat - Test the Application
+						
+						Build
+						Create Artifacts(Binaries - *.war/*.jar/*.dll/*.exec)
+						
+						mywebapp.war_v1.0  	---> jdk11, tomcat9		
+
+						Sign.java	==> Sign.war 	==> ---> jdk11, tomcat9	
+						
+						Signup.java	==> Signup.war 	==> ---> jdk8, tomcat8.5	
+					
+					Package ==> Signup.war ==> Application Image (Signup.war,jdk11, tomcat9) ==> signup_appimg1:v1.0
+						
+						Add the Image to Container Registry.
+						
+				Promote the artifacts to target enviroments 				
+				
+				
+				QA(VM) 	--> mywebapp.war_v1.0	---> jdk11, tomcat9	
+						Sign.war	==> 	---> jdk11, tomcat9	
+						Signup.war 	==> 	---> jdk8, tomcat8.5	
+				
+				UAT --> mywebapp.war_v1.0	--> jdk11, tomcat9	
+				
+				PROD --> mywebapp.war_v1.0	--> jdk11, tomcat9		
+				
+				
+				Monolith Application Architecture :::
+				
+				Micro-Service Based Application Architecture :::
+				
+					Application :	E_Commerce(www.amazon.com)
+						service1		Sign.java
+						service2		Signup.java 
+						service3		payment.java
+
+
+				Environments :
+				
+					DEV Server
+					
+					QA Server 
+				
+
+	Containerization using Docker ::
+	
+		Containerization ==> It is process of packaging the Application along with its dependencies. 
+		
+			Virual Machine ::
+			
+				- VMs are called as Hardware level Virtualization 
+				- VMs are Created using Hypervisor 
+				- VMs are used to run the Operating Systems
+				- VMS consume more space and time to start
+				- VMs Consume more resource, even if there is no application running.
+
+			Container ::
+
+				- Containers are called as OS Level Virtualization
+					- Containers uses the underlying properties of OS(Kernel) like Namespace / Control Groups
+				- Containers are Created using Container Engine 
+				- Container are basically used to run the Task/Applications, NOT Operating System
+					- If we try to run the Container without any Task/Application, Container will immediately goes to exit state
+					- Container release the resources. It will never hold the resource with any task/application
+				- Container consume less space and time to start
+
+	
+		Containerization ==> It is process of packaging the Application along with its dependencies. 
+		
+			Infra-Structure Perspective :::
+			
+				Jenkins_Master(VM) 		# Create Jenkins Jobs and schedule it to run in the slave nodes.
+										Java,.net,python,nodejs,angular,ruby
+				
+					Jenkins_Slave1(VM)	# Used to perform actual build 	- Java build 
+					Jenkins_Slave2(VM)	# Used to perform actual build	- Python
+					Jenkins_Slave3(VM)	# Used to perform actual build	- NodeJS		
+					Jenkins_Slave4(VM)	# Used to perform actual build	- Angular		
+					Jenkins_Slave5(VM)	# Used to perform actual build	- .Net
+					
+					
+				Containerization :::
+				
+					- It is used to reduce the number of VMs.					
+					
+					Jenkins_Master(VM) :
+						Jenkins_Slave1(VM)
+							Container-Engine
+								C1 - Java build 
+								C2 - Python
+								C3 - NodeJS	
+								C4 - Angular	
+								C5 - .Net				
+					
+					
+			Deployment Perspective ::	
+				
+				Containerization :::
+				
+					- It is used to prevent the compatibility issues of the tools in all the higher enviroments.
+					- It is process of packaging the Application along with its dependencies. 
+
+			Developer ::
+			
+				Dev Environment :
+					Create Source Code 	# Local Machine using Eclipse IDE/Unit Test/Tomcat - Test the Application
+						
+						Build
+						Create Artifacts(Binaries - *.war/*.jar/*.dll/*.exec)
+						
+						mywebapp.war_v1.0  	---> jdk11, tomcat9		
+					
+					Package ==> mywebapp.war_v1.0 ==> Application Image (mywebapp.war_v1.0, jdk11, tomcat9) ==> mywebapp_img:v1.0
+						
+						Publish the Application Image to Container Registry.
+						
+				Promote the artifacts to target enviroments 				
+				
+				
+				QA(VM) 	-->
+						mywebapp_img:v1.0			(mywebapp.war_v1.0,jdk11, tomcat9)
+						Create Container out of this image and run the container.
+
+				
+				UAT --> mywebapp_img:v1.0			(mywebapp.war_v1.0,jdk11, tomcat9)
+						Create Container out of this image and run the container.
+				
+				PROD --> mywebapp_img:v1.0			(mywebapp.war_v1.0,jdk11, tomcat9)
+						 Create Container out of this image and run the container.
+				
+				
+		
+		Terminologies :::
+		
+			Container Image 	# Is a static file, that define the properties(application & its dependencies) of the container
+								# Image are Non-Executable
+								
+			Container			# Executable units of Container Image
+			
+			Container Registry	# Is used to store/Manage the Container Images
+								# DockerHub 
+								
+			Container Repository# It is sub-set of Container Registry
+			
+			Container Engine	# Is used create the Container Image, Container and Manage the Container
+								# Docker Container Engine
+		
+		
+		Docker Containers :::
+		
+		Managed Services ::
+		
+			AWS 		ECS, ECR, EKS
+			
+			AZURE		ACS, ACR, AKS 
+			
+			GCP 		GCE, GCR, GKE
+			
+		DevOps Tools :
+		
+			Open-Source DevOps Tools :
+				git, jekins,docker,kubernetes,.....
+			
+			Managed Services
+			
+				Service Providers - Paid Service 
+			
+			
+		Working with Docker ::
+		
+			Container Registry :
+			
+				Goto https://hub.docker.com/
+				
+				Create Account 
+				
+			Install Docker Container Engine :
+			
+				Jenkins Slave Node :::
+				
+				Launch a Virtual Machine on AWS Cloud Platform 
+				
+					Ubuntu 22.04 
+					
+					Install Docker Engine 			https://docs.docker.com/engine/install/
+					
+					docker cli			# Is a command line utility to interact with Docker Engine and work with Images and Containers
+					
+					
+					As a root user run this command:
+					
+						sudo -i
+						apt update -y
+						apt install docker.io -y
+					
+				
+				docker --version
+				
+				
+Next ::
+		Docker CLI - Misc Command 
+				
+
+######################
+Day 2 - 10th June 2024
+######################
+
+	Docker CLI Commands :
+	
+		Working with Images, containers
+		Volumes 
+		Port Mapping 
+		Create New Container Images 
+			- docker commit
+			- docker build
+		Container Orchestration tools 
+			- Overview of Docker Swarm 
+			- Kubernetes 
+			
+	Docker CLI Commands :
+
+		docker images  		# used to get the list of images in local machine 
+		
+		docker ps			# used to get the list of running containers 
+		
+		docker ps -a 		# used to get the list of container in running/exit state
+		
+		
+		docker pull <image>	# Download image from container registry
+		
+		
+		docker run <image_name>		# Used to create a Container and execute it.
+		
+		Modes of Container Exection :
+		
+			Foreground/Attached Mode 	# It run the container in active terminal				# Default
+										# Till the process completes, it will hold the terminal 
+										
+				docker run centos sleep 20 
+		
+			Background/detached Mode 	# Container run in background mode 
+			
+				docker run -d centos sleep 20
+			
+			Interactive Mode			# Login to Container and access the container volumes/files 
+		
+				docker run -it centos bash 
+		
+				docker run -d --name=appteam1 centos sleep 60			# Using --name Tag
+		Jenkins_Slave Node :: (VM) 
+			jdk 
+			git
+			maven
+						App_Build_Server (VM)
+							Container-Engine
+								C1 - Java build 
+								
+								
+			docker start <container_id>		# Start the Container that is in exited/stopped state 
+			
+			docker stop <contianer_id> 		# Stop the running Container
+			
+			docker exec -it <container_id> bash		# To login to running container
+			
+			
+			docker rm <Container_id>		# remove the container 
+			
+			docker rmi <image_name>			# Delete the Image
+			docker rmi -f <image_name 		# Forceful deletion of Image from local Machine 
+		
+		
+	
+	Volumes :::
+	
+		Docker Volumes :::
+		
+			- Used to maintain the persistant container data.
+			- Using Docker Volumes we can save the container data into the host machine.
+			- We can pass the data to the container volume from host machine.
+			
+		
+			docker run -it --mount source=sa-devops-junvol1,destination=/sa-devops-junvol1 centos bash
+			
+			
+						App_Build_Server (VM)
+							Container-Engine
+								C1 - Java build - git,jdk,maven - sa-vol1
+
+	
+	
+	Port Mapping/Binding :::
+	
+		- It is used map the container port with the host port.
+	
+		-p <host_port>:<container_port>
+		
+		
+		docker run -it -p 8086:8080 tomcat:8.0
+		
+		App_Build_Server(VM)
+			Container_Engine
+				C1(tomcat)	*.war 
+				C2(tomcat)	*.war 
+				C3(tomcat)	*.war 
+				C4(tomcat)	*.war 
+				
+    1  apt update -y
+    2  apt install docker.io -y
+    3  docker --version
+    4  clear
+    5  docker --version
+    6  docker images
+    7  docker ps
+    8  docker ps -a
+    9  docker pull centos
+   10  docker images
+   11  docker run centos
+   12  docker ps
+   13  docker ps -a
+   14  docker run centos
+   15  docker ps -a
+   16  clear
+   17  docker images
+   18  docker ps -a
+   19  docker ps
+   20  docker run centos sleep 20
+   21  docker run centos sleep 10
+   22  adfasd
+   23  docker run -d centos sleep 10
+   24  docker ps
+   25  docker ps -a
+   26  docker run -it centos bash
+   27  docker ps
+   28  docker ps -a
+   29  docker start c33c756907a4
+   30  docker ps
+   31  docker exec -it c33c756907a4 bash
+   32  docker ps
+   33  docker stop c33c756907a4
+   34  docker ps
+   35  docker run -d centos sleep 60
+   36  docker ps
+   37  docker exec 31735f0dc618 bash
+   38  docker exec -it 31735f0dc618 bash
+   39  docker ps
+   40  docker stop 31735f0dc618
+   41  docker ps -a
+   42  docker run -d --name=appteam1 centos sleep 60
+   43  docker ps
+   44  docker ps -a
+   45  clear
+   46  docker images
+   47  docker run -it alpine bash
+   48  clear
+   49  docker images
+   50  docker ps -a
+   51  docker ps
+   52  docker rm 9c10b7e47c4b
+   53  docker ps
+   54  docker ps -a
+   55  docker rm 0ee6dc49b685 51aa0f15e46e
+   56  docker ps -a
+   57  docker rmi centos
+   58  docker rmi alpine
+   59  docker rm cd0419f817e3
+   60  docker rmi alpine
+   61  docker images
+   62  clear
+   63  docker ps
+   64  docker volume list
+   65  docker volume create sa-devops-junvol1
+   66  docker volume list
+   67  docker volume inspect sa-devops-junvol1
+   68  cd /var/lib/docker/volumes
+   69  ls
+   70  cd sa-devops-junvol1/
+   71  ls
+   72  cd _data/
+   73  clear
+   74  docker volume list
+   75  cd ~
+   76  docker run -it centos bash
+   77  docker run -it --mount source=sa-devops-junvol1 destination=/sa-devops-junvol1 centos bash
+   78  docker run -it --mount source=sa-devops-junvol1,destination=/sa-devops-junvol1 centos bash
+   79  docker ps
+   80  cd /var/lib/docker/volumes/sa-devops-junvol1/_data
+   81  ls
+   82  cat container_file1.txt
+   83  clear
+   84  ls
+   85  echo "rec1" > hostfile1.txt
+   86  ls
+   87  docker run -it --mount source=sa-devops-junvol1,destination=/sa-devops-junvol1 centos bash
+   88  docker volume inspect sa-devops-junvol1
+   89  cd ~
+   90  clear
+   91  docker images
+   92  docker run -it tomcat:8.0 bash
+   93  docker ps -a
+   94  clear
+   95  docker ps -a
+   96  docker stop fe9c4053575c 65669e8e8938 16bd9534af84
+   97  docker ps -a
+   98  docker stop 43815e30fa2a
+   99  docker ps -a
+  100  history
+
+    9  clear
+   10  docker ps
+   11  docker ps -a
+   12  docker ps
+   13  docker run -it -p 8085:8080 tomcat:8.0 bash
+   14  docker run -it -p 8085:8080 tomcat:8.0
+   15  history
+				
+Next :
+
+		Create New Container Images 
+			- docker commit
+			- docker build
+		Container Orchestration tools 
+			- Overview of Docker Compose
+			- Overview of Docker Swarm 
+			- Kubernetes 			
+		
+
+######################
+Day 3 - 11th June 2024
+######################
+
+	Create New Container Images 
+		
+		- docker commit :::::::::
+		
+				- Is used to create a new container image based on the existing Container
+
+			Create a Container 		--> build 
+				- install git
+				- jdk 
+				- maven 
+			
+			Syntax:
+				docker commit <container_id> <new_image_name>
+			
+			Eg.: 			
+				docker commit 0654ac297a7e loksaieta/sa-june-img1
+
+
+			Publish the newly created image to container registry 
+			
+			- Login to DockerHub Registry
+
+			- Create an Access Token in dockerhub account 
+			
+			- docker login  -u <docker_hub_Account_ID>
+			
+			- password : asdasdasd
+			
+			- docker push loksaieta/sa-june-img1:latest
+
+		
+		
+		- docker build ::::::::
+		
+				- Is used to create a new container image based on the Dockerfile definition
+				
+				docker build -t loksaieta/sa-june-gitimg1:v1.0 .			# '.' denote the Dockerfile reference
+				
+			Dockerfile :::
+			
+				- Is used to define the properties of Container Image
+				- It composed of various Instructions - stages/Layer 
+				- Application Developers will create the Dockerfile and maintain it in the Source_Code Repository.
+
+mkdir docker-contents
+cd docker-contents				
+vi Dockerfile 
+
+FROM debian
+RUN apt-get update -y
+RUN apt-get install git -y
+
+docker build -t loksaieta/sa-june-gitimg1:v1.0 .			# '.' denote the Dockerfile reference
+
+docker history loksaieta/sa-june-gitimg1:v1.0				# Used to get the history/layers of Images
+
+
+	Dockerfile Instructions :::
+	
+	
+	FROM 	::: Is used to define the base image(pull from docker registry)
+
+	RUN 	::: Is used to run/execute package managers to manage the packages in container
+
+	COPY	::: Is used to Copy the files from Host Machine to Container path
+	
+	ADD		::: Is used to Copy the files from Host Machine to Container path
+				It is also used to copy the files from Url.
+	
+	CP		::: Is used to copy the files within the containers
+
+	WORKDIR ::: Is used to specify the current working dir
+
+	EXPOSE  ::: Is used to expose the container port
+	
+	ENV 	::: Is used to set envi. variables within the image
+
+	VOLUME	::: Is used to define the volume to be used in image
+	
+	CMD	::: Is used to execute any command when run the container
+			/bin/bash  ==> Can be replaced at runtime.
+
+	ENTRYPOINT	::: Is used to execute any command when run the container
+			/sleep 30 ==> Cannot be replaced at runtime
+				
+			
+			Publish the newly created image to container registry 
+			
+			- Login to DockerHub Registry
+
+			- Create an Access Token in dockerhub account 
+			
+			- docker login  -u <docker_hub_Account_ID>	
+			
+			- password : OeczxczxM
+			
+			- docker push loksaieta/sa-june-img1:latest			
+				
+							
+
+	- Docker Compose ::::
+	
+		- Is a docker extension/plugins - used to run multiple containers as a service.
+		
+		
+		Eg.:
+		
+		3 - Tier Application Architecture :: ===> Containerized :::
+		
+		
+		
+			Front-End Layer 	-- 	User Interface 		---> C1
+			
+			Application Layer 	--  Business Logic		---> C2 - not start ?
+			
+			Backend Layer		--  DataBase  			---> C3
+			
+			
+		E_Commerce Application :
+		
+			User_Registration 	===> 3 - Tier Application Architecture :
+			
+			User_Login 
+			
+			Payment 
+			
+		Install Docker Compose plugin/Utility
+		
+		Define Service ===> *.yaml
+			
+
+//https://docs.docker.com/compose/install/linux/
+
+
+DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+mkdir -p $DOCKER_CONFIG/cli-plugins
+curl -SL https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+	
+
+chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+docker compose version
+// Docker Compose version v2.18.
+
+	-> Create a manifest/config file ==> Is written using yaml script.
+		vi docker-compose.yaml
+
+[root@ip-172-31-47-216 service1]# cat docker-compose.yaml
+
+version: '3'
+services:
+  webserv:
+    image: "tomcat:8.0"
+    ports:
+      - 8098:8080
+  dbserv:
+    image: "redis:alpine"
+
+docker compose version
+
+docker compose up			Start all the container as defined in docker-compose file
+
+docker compose down 		Stop all the container as defined in docker-compose file
+
+
+	Container Orchestration Tools :
+
+		Overview of Docker Swarm 
+	
+		Kubernetes
+		
+	Container Orchestration Tools are used to ensure High Availability of Containers
+
+		3 - Tier Application Architecture :: ===> Containerized :::
+		
+			Front-End Layer 	-- 	User Interface 		---> C1,C1.1,C1.2 			---> 3 replicas of container
+			
+			Application Layer 	--  Business Logic		---> C2,C2.1,C2.2
+			
+			Backend Layer		--  DataBase  			---> C3,C3.1,C3.2
+			
+		
+		Docker Swarm ::
+		
+			It is used to orchestrate Docker Container only
+			
+			It is used to create replicas of Container, It helps to ensure high availability of Container 
+			
+			Scale-up 
+			
+			Scale-Down 
+			
+			Not possible to Auto-Scale 
+			
+			Not possible to perform Load Balancing 
+			
+			
+			Online-Ticket booking system
+			
+				-> 10000 users to login to their applications -- 100 replicas of containers
+				
+				-> 50000 users ??? -- 500 replicas of containers ???
+				
+				-> 10000 users -- 100 replicas of containers
+			
+			
+		Environments :
+		
+			Dev 
+			
+			QA 
+			
+			UAT 						===> Prod Environment --> Prod Server1,2,3,4,5,6
+			
+			
+		Kubernetes ::::
+		
+			--> It is Open-Source Container Orchestration Tool
+			
+			--> Used to Ensure High-Availability of Containers/Pods
+			
+			--> Create the replicas of Container/Pods to ensure high availability.
+
+			--> Perform Auto-Scaling 
+			
+			--> Load-Balancing
+			
+			--> Using Kubernetes and DevOps Process, we can achieve Continous Deployment
+			
+		
+		
+		Managed Services::::
+		
+			AWS 	---> ECS/ECR/EKS
+			
+			Azure 	---> ACS/ACR/AKS
+			
+			GCP 	---> GCE/GCR/GKE
+			
+  123  clear
+  124  docker ps -a
+  125  docker run -it --mount source=sa-devops-junvol1,destination=/sa-devops-junvol1 centos bash
+  126  clear
+  127  ls
+  128  docker images
+  129  docker run -it debian bash
+  130  docker ps
+  131  docker ps -a
+  132  docker start 0654ac297a7e
+  133  docker ps
+  134  docker exec -it 0654ac297a7e bash
+  135  docker ps
+  136  docker stop 0654ac297a7
+  137  docker ps
+  138  docker images
+  139  docker commit 0654ac297a7e loksaieta/sa-june-img1
+  140  docker images
+  141  docker run -it loksaieta/sa-june-img1 bash
+  142  docker images
+  143  docker login  -u loksaieta
+  144  docker push loksaieta/sa-june-img1:latest
+  145  ls
+  146  docker-contents
+  147  cd do
+  148  mkdir docker-contents
+  149  cd docker-contents/
+  150  vi Dockerfile
+  151  cat Dockerfile
+  152  docker images
+  153  docker build -t loksaieta/sa-june-gitimg1:v1.0
+  154  docker build -t loksaieta/sa-june-gitimg1:v1.0 .
+  155  docker images
+  156  cat Dockerfile
+  157  docker history loksaieta/sa-june-gitimg1:v1.0
+  158  docker ps -a
+  159  cd ~
+  160  clear
+  161  docker --version
+  162  DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+  163  mkdir -p $DOCKER_CONFIG/cli-plugins
+  164  curl -SL https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-linux-x86_64 -o
+  165  curl -SL https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+  166  chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+  167  docker compose version
+  168  vi docker-compose.yaml
+  169  docker images
+  170  docker ps
+  171  docker ps -a
+  172  celar
+  173  clear
+  174  docker ps
+  175  docker images
+  176  docker-compose up
+  177  docker compose up
+  178  docker ps
+  179  docker ps -a
+  180  history
+			
+Next :::
+
+	- Work with Kubernetes :
+	
+	- Kubernetes Architecture
+	
+	- Kubernetes Concepts / Terminologies
+	
+	- Kubernetes Object like pods, deployment controller object, Namespaces...
+	
+	- Jenkins Pipeline Demo with Docker and Kubernetes

@@ -1,0 +1,1044 @@
+######################
+Day 4 - 12th June 2024
+######################	
+	
+	Kubernetes ::::
+
+	--> It is Open-Source Container Orchestration Tool
+	
+	--> Used to Ensure High-Availability of Containers/Pods
+	
+	--> Create the replicas of Container/Pods to ensure high availability.
+
+	--> Perform Auto-Scaling 
+	
+	--> Load-Balancing
+	
+	--> Using Kubernetes and DevOps Process, we can achieve Continous Deployment
+
+
+	Kubernetes Architecture
+	
+		- Kubernetes Components 
+	
+	Terminologies of Kubernetes 
+	
+	Concepts of Kubernetes 
+	
+		- Pods 
+		
+		- Nodeport Service 
+		
+		- Deployment Controller Object
+		
+		- Volume - Hostpath 
+		
+		- Namespace 
+		
+	Installation and Configuration of Kubernetes ::
+	
+	
+	1. Developers Create the Source Code 
+	
+	2. Commit the Source_Code to Source_Code Repository(Github)
+	
+	3. Jenkins_pipeline  ---> for Monolith Application Architecture
+		- SCM_Checkout - Download the source_code to build server
+		- Application_Build - Process of compiling the source code and create artifacts(Binaries - *.war/*.jar) 
+		- Deploy the artifacts to Target Server(QA/UAT/PROD) 
+		
+	3.1 Jenkines Pipeline ---> for Containerized - Micro-Service Based Application Architecture
+	
+		- SCM_Checkout 
+		- Application_Build using Maven 
+		- Application Image Build using Docker 
+		- Published to Container Registry(Dockerhub)
+		- Deploy the Container Image in the Target Server and run the Application using Container.
+		
+		
+	Kubernetes Architecture ::::
+	
+		Master & Worker-Nodes
+
+		Jenkins_Master 	(VM)			==> Used to Create CICD Pipeline Projects and schedule the builds in slave nodes
+			Jenkins_Slave_Node (VM)		==> Used to perform the application Build & Create artifacts
+		
+		Kubernetes_Master (VM)			==> Validate the deployment request and schedule the deployment to workernodes
+			Kubernetes_WorkerNode1 (VM) ==> Used to run the Application Containers/Pods
+			Kubernetes_WorkerNode2 (VM)	==> Used to run the Application Containers/Pods
+			Kubernetes_WorkerNode3 (VM) ==> Used to run the Application Containers/Pods
+			
+			
+		Components of Kubernetes Architecture:
+		
+			- API Server 	
+				- Receive the incoming request & validate the request 
+				- Update the details in the ETCD Database
+			
+			- ETCD 
+				- Single point of source to all kubernetes objects				
+			
+			- Scheduler
+				- It will identify the healthy WorkerNode for deployment
+			
+			- Controller Manager 
+				- It is reponsible to run the pods/containers in its' desired state.
+				- Ensure High Availability by creating replicas.			
+			
+			- Kubelet 
+				- Is a kubernetes Agent that run on all the Nodes 
+				- Kubelet is responsible to start/deploy containers/Pods
+			
+			- CRI - Container Runtime Interface(Container-D)
+				- Used to download the Container Images from Container Registry
+			
+			- Kube-Proxy 
+				- Is used to establish networking between the pods.
+				- It is responsible to assign unique pod IP Address for communication.
+				
+				
+	Terminologies of Kubernetes  :::
+	
+		Kubernetes_Master (VM)		# Validate the deployment request and schedule the deployment to workernodes
+		
+		Kubernetes_WorkerNode1 (VM) # Used to run the Application Containers/Pods
+		
+		Container Image 		# Is a static file, that define the properties(application & its dependencies) of the container
+								# Image are Non-Executable
+								# Composed of Layer of Instructions
+							
+		Container				# Executable units of Container Image
+		
+		Container Registry		# Is used to store/Manage the Container Images
+								# DockerHub 
+							
+		Container Repository	# It is sub-set of Container Registry
+		
+		Pods 					# Pod is the smallest unit of schedule/Task that runs in Kubernetes
+								# Is used to run the Containers in Kubernetes
+		
+		Kubectl					# It is command line utility used to interact with Kubernetes Master
+		
+		Kubelet					# It is Agent that runs in the Kubernetes Nodes, it is used to start the pods 
+
+		Kubernetes Cluster		# It is Logical group of Worker Nodes 
+								# Collection of Worker Nodes
+		
+			Kubernetes_Master (VM)		- Control Plane
+				Kubernetes_Cluster					--> Logical Name to group the Worker-Nodes 
+					Kubernetes_WorkerNode1 (VM)
+					Kubernetes_WorkerNode2 (VM)
+					Kubernetes_WorkerNode3 (VM)
+					
+		
+		Kubernetes_Master (VM)	
+        	Kubernetes_Cluster1				
+        		Kubernetes_WorkerNode1 (VM)
+        		Kubernetes_WorkerNode2 (VM)
+        		Kubernetes_WorkerNode3 (VM)
+        	Kubernetes_Cluster2				
+        		Kubernetes_WorkerNode1 (VM)
+        		Kubernetes_WorkerNode2 (VM)
+        		Kubernetes_WorkerNode3 (VM)
+        	Kubernetes_Cluster3				
+        		Kubernetes_WorkerNode1 (VM)
+        		Kubernetes_WorkerNode2 (VM)
+        		Kubernetes_WorkerNode3 (VM)
+
+		Kubernetes_Master 
+			Kubernetes_Master1 (VM)	
+				Kubernetes_Cluster1	
+					Kubernetes_WorkerNode1 (VM)
+					Kubernetes_WorkerNode2 (VM)
+					Kubernetes_WorkerNode3 (VM)
+				Kubernetes_Cluster2				
+					Kubernetes_WorkerNode1 (VM)
+					Kubernetes_WorkerNode2 (VM)
+					Kubernetes_WorkerNode3 (VM)
+				Kubernetes_Cluster3				
+					Kubernetes_WorkerNode1 (VM)
+					Kubernetes_WorkerNode2 (VM)
+					Kubernetes_WorkerNode3 (VM)
+			Kubernetes_Master2 (VM)	
+				Kubernetes_Cluster1				
+					Kubernetes_WorkerNode1 (VM)
+					Kubernetes_WorkerNode2 (VM)
+					Kubernetes_WorkerNode3 (VM)
+				Kubernetes_Cluster2				
+					Kubernetes_WorkerNode1 (VM)
+					Kubernetes_WorkerNode2 (VM)
+					Kubernetes_WorkerNode3 (VM)
+				Kubernetes_Cluster3				
+					Kubernetes_WorkerNode1 (VM)
+					Kubernetes_WorkerNode2 (VM)
+					Kubernetes_WorkerNode3 (VM)
+					
+	
+	Hybrid Environment
+	
+		On-Premises Servers 
+		
+		Cloud Platform 		
+		
+			AWS 
+		
+			Azure 
+		
+		
+		CICD Pipeline 
+		
+			Build the code 
+			Deploy the Application to Target Environment (AWS/Azure/On-prem)
+
+					
+	Pods :::
+
+	Installation and Configuration of Kubernetes :::
+	
+		minikube 	# Just of learning the kubernetes basic objects
+		
+		kubeadm 	# Is Command Line Utility - Used to Install and Configure Kubernetes Master and WorkerNodes.
+
+		
+	1. Install Pre-requisites 	
+	2. Install Kubernetes Components 	
+	3. Post Installation Activities 
+		
+	
+		Kubernetes_Master (VM)					
+			Kubernetes_WorkerNode1 (VM)
+			Kubernetes_WorkerNode2 (VM)
+			
+	Installation Procedures :::
+	
+		Launch 3 VMs --> ami - ubuntu v22.04
+		
+		- Commands/Tools executed in all the Nodes(Master/Worker)
+		
+			1. Setup up the Host Name 
+			2. Install Docker 
+			3. Install Container Runtime Interface (CRI) - Container-D
+				- Install and Configure the pre-requisites for Container-D 
+				- Install Container-D
+				- Setup Container-D Configurations
+				- Start/Enable Container-D Service
+			4. Install kubeadm, Kubelet, Kubectl 
+			5. Disable Swap 
+			6. Enable Kubelet 
+				
+		
+		- Commands/Tools executed only on Master Node
+			
+			7. kubeadm Init 
+			8. Install and Configure Master based on given instructions
+			
+		- Commands executed only on Worker Node 
+
+			9. kubeadm join using token based authentication
+		
+Next :::
+
+	Installation and Configuration of Kubernetes
+	
+	Concepts of Kubernetes 
+	
+		- Pods 
+		
+		- Nodeport Service 
+		
+		- Deployment Controller Object
+		
+		- Volume - Hostpath 
+		
+		- Namespace 
+
+
+
+
+######################
+Day 5 - 14th June 2024
+######################
+
+Application :
+
+Cluster 
+	Micro-Services 
+		deployed as pods
+		
+
+		Kubernetes_Master (VM)					My - E_Commerce - www.amazon.com
+        	Kubernetes_Cluster1				
+        		Kubernetes_WorkerNode1 (VM)
+        		Kubernetes_WorkerNode2 (VM)
+        		Kubernetes_WorkerNode3 (VM)
+        	Kubernetes_Cluster2				
+        		Kubernetes_WorkerNode1 (VM)
+        		Kubernetes_WorkerNode2 (VM)
+        		Kubernetes_WorkerNode3 (VM)
+        	Kubernetes_Cluster3				
+        		Kubernetes_WorkerNode1 (VM)
+        		Kubernetes_WorkerNode2 (VM)
+        		Kubernetes_WorkerNode3 (VM)
+				
+
+		Kubernetes_Master (VM)					My - E_Commerce - www.flipcart.com
+        	Kubernetes_Cluster1				
+        		Kubernetes_WorkerNode1 (VM)
+        		Kubernetes_WorkerNode2 (VM)
+        		Kubernetes_WorkerNode3 (VM)
+        	Kubernetes_Cluster2				
+        		Kubernetes_WorkerNode1 (VM)
+        		Kubernetes_WorkerNode2 (VM)
+        		Kubernetes_WorkerNode3 (VM)
+        	Kubernetes_Cluster3				
+        		Kubernetes_WorkerNode1 (VM)
+        		Kubernetes_WorkerNode2 (VM)
+        		Kubernetes_WorkerNode3 (VM)
+				
+				
+		
+		
+	www.amazon.com 	E_Commerce Portal - Web Application		Micro-Service Based Application Architecture 5000 Micro-Services (VM)
+	
+		User_Sign-up - Micro-Service1	- Source_Code_Repo - Developer1 - Change the code,(python/html/mysql), test, promote to (QA)further testing -- production
+		User_Login 	 - Micro-Service2	- Source_Code_Repo - Developer2 - Change the code,(java/html/mysql), 	test, promote to (QA)further testing -- production
+		Search 		 - Micro-Service3	- Source_Code_Repo - Developer2 - Change the code,(python/Django/mysql), test, promote to (QA)further testing -- production
+		Add to cart 
+		place_order 
+		Payment 
+		Confirm_Order 
+		Track
+
+
+				Containerization :::
+				
+					- It is used to reduce the number of VMs.					
+					
+					
+						QA_Server(VM)
+							Container-Engine
+								C1 - Micro-Service1
+								C2 - Micro-Service2
+								C3 - Micro-Service3
+								C4 - Micro-Service4
+								C5 - Micro-Service5
+								
+		DevOps Team ::
+
+		What is DevOps ???
+		
+		DevOps ???
+		
+		DevOp is a Software Development Strategy which is used to promote collaboration between the teams like Development and Operations Team to achieve Continuous Development, Continuous Integration, Continuous Testing, Continuous Delivery/Deployment, Continuous Monitoring in more automated fashion.
+		
+		
+		Teams:
+		
+		DevOps Team : Micro-Service Based -- How quickly they can develop, unit-test, qa, uat and deploy to prod 
+		
+			Containerization 
+				Dockerfile --> 
+				
+				DevOps Team will create Dockerfile Templates and share it with Development Team 
+				
+				Kubernetes --> Manifest file *.yaml - DevOps Team(Kubernetes Developers) will create Kubernetes Manifest File Template for Developers
+		
+			Infra-Structure Management Team 
+			Application Deveopment Team			Core Team -- Developing Business Application 
+			Testing Team					--> 10 Days to complete the testing ==> within a Day or 1 Hours
+			Release Management Team
+			Production Support Team 
+			Production Monitoring Team 
+			Security Team 
+			
+			
+			
+		Domain : 
+			Telecomm Domain
+			
+			SP1 --> Today - introduce a new offer to their customers if the IT TEam takes 1 Month to implement
+			
+			SP2 
+			
+			
+		Environments :::
+		
+		Non-Prod Environments												Production Environment
+		
+			Dev Environment	(Developers - IDE, Unit Testing) - Source Code Repo
+			
+				10 Unit Test Scenarios ::: 8 Scenarios 
+			
+			Build Environment
+						(Build & Create Artifacts - *.war)
+						(Build Docker Image based on *.war)
+						
+		DevOps Team	::
+			Test Environments	*.war / Application Image
+				QA - Quality Assurance Testing 				30 QA Test Scenarios
+					(f/r/s/p/)
+				
+				UAT - User Acceptance Testing(Actual/Realtime Production/Customer Data)	=======>>			Production Servers
+												
+				SP1 --> Today - introduce a new offer to their customers - if the IT TEam takes 1 Month to implement
+				
+		CICD Pipeline :::
+		
+			SCM_Checkout 
+			
+			Build 
+			
+			Unit Testing 		10 Unit Test Scenarios JUNIT / MAVEN 
+			
+			Promote to higher enviroments
+			
+		DevOps Team 
+		
+			2 members - Repo Mgmt - github/az-repo
+			
+			2 members - Jenkins 
+			
+			Kubernetes --> Kubernetes : Developers/Admin/Security Admin
+			
+			Infra-Structure -> ansible/terraform 
+			
+			
+		Deployment :::: Launch 
+		
+			--> Just a process of copying the artifacts from one server to another server 
+			
+			Manual / Automated ???
+			
+			
+		
+			installed git / Visual Studio Code 
+			
+			downloaded git / Visual Studio Code  from their application Artifactory Libraries *.exec
+		
+	
+		Continuous Delivery/Deployment :::
+		
+			- Both are used to release the changes to Production 
+				- non-prod to prod
+			- Both are related to Production Releases
+			
+			
+			
+			Continuous Delivery :
+				- It is a process that expects manual approval/Manual intervension for production release. 
+				- Might leads to some down-time during production release. 
+				
+				Jenkins 
+				
+			Banking Applications ::
+				Online Banking - 
+				
+					Production Release Window :
+						4Hrs - 6Hrs - Non-Business Hours 
+						
+						Down the envi. 
+						
+						Checklist of all teams 
+						
+						Promote the Application to Production Environment
+						
+						Thorough Testing @ Production Environment
+						
+						V1.0
+						
+						V1.1	Latest ==> 
+							Fix the issue with deployment window 
+							else revert.
+						
+					
+			Continuous Deployment :
+				- It is a process that Never expects any manual approval/Manual intervension for production release. 
+				- It helps to perform fully automated Production Releases.
+				- Production Release can be achieved without any downtime.
+				- This can be achieved only with Micro-Service based Application Architecture
+				- This is considered as a matured level of DevOps.
+				
+				
+			DevOps Tools ::
+			
+				Jenkins/Docker/Kubernetes/
+				
+			facbook / google / amazon  -- every hr they deploy new features
+			
+			EC2  K8s - CICD
+			
+		
+		Docker ?
+		
+		Image (vs) Container
+
+
+
+				
+	3.1 Jenkines Pipeline ---> for Containerized - Micro-Service Based Application Architecture
+	
+		- SCM_Checkout 
+		- Application_Build using Maven 
+		- Application Image Build using Docker 
+		- Published to Container Registry(Dockerhub)
+		- Deploy the Container Image in the Target Server and run the Application using Container.
+
+
+######################
+Day 6 - 17th June 2024
+######################
+
+				
+	Installation and Configuration of Kubernetes
+	
+	Concepts of Kubernetes 
+	
+		- Pods 
+		
+		- Nodeport Service 
+		
+		- Deployment Controller Object
+		
+		- Volume - Hostpath 
+		
+		- Namespace 					
+		
+		
+		
+		
+			
+	1. Install Pre-requisites 	
+	2. Install Kubernetes Components 	
+	3. Post Installation Activities 
+		
+	
+		Kubernetes_Master (VM)					
+			Kubernetes_WorkerNode1 (VM)
+			Kubernetes_WorkerNode2 (VM)
+			
+	Installation Procedures :::
+	
+		Launch 3 VMs --> ami - ubuntu v22.04
+		
+		- Commands/Tools executed in all the Nodes(Master/Worker)
+		
+			1. Setup up the Host Name 
+			2. Install Docker 
+			3. Install Container Runtime Interface (CRI) - Container-D
+				- Install and Configure the pre-requisites for Container-D 
+				- Install Container-D
+				- Setup Container-D Configurations
+				- Start/Enable Container-D Service
+			4. Install kubeadm, Kubelet, Kubectl 
+			5. Disable Swap 
+			6. Enable Kubelet 
+				
+		
+		- Commands/Tools executed only on Master Node
+			
+			7. kubeadm Init 
+			8. Install and Configure Master based on given instructions
+			
+		- Commands executed only on Worker Node 
+
+			9. kubeadm join using token based authentication	
+			
+			
+	Open-Source Kubernetes 
+	
+		
+	
+	Managed Services :
+	
+		AWS - ECS,ECR,EKS 
+		
+		Azure - ACS,ACR,AKS 
+		
+		GCP - GCE,GCR,GKE 
+		
+	Eg.: 
+			QA _ Server 
+			
+				jdk 
+				setup envi variables - JAVA_HOME 
+				Tomcat 
+				Start Tomcat 
+			
+			JEnkins SLave Node 
+			
+				Maven 
+	
+	
+	Concepts of Kubernetes 
+	
+		- Pods 
+		
+		
+	How to login to running container ???
+	
+		docker exec -it <container_id> bash
+	
+	How to Access the Container Application thru internet ???
+	
+		port mapping/binding
+		
+	
+	NodePort Service 			# Is used to expose the pod to internet.
+	 - It create a service with nodeport range 30000 - 32767
+	 
+	 using this nodeport number and external ip address of node we can access the application
+
+
+
+######################
+Day 7 - 18th June 2024
+######################
+
+	Deployment Controller Object :::
+	
+	Deployment Controller ::
+	
+	Pods ::
+	
+	Deployed a pod.
+	
+		workernode1
+		
+		Access the application running inside the pod?
+		
+		kubectl get pods -o wide 
+		
+		<external_ip>:<node_port>
+		
+		Controller Objects :::
+
+			Replicaset ::
+			
+				- Used to run a specific instance of pods.
+				- It is used to create replicas of pod.
+				
+			- Controller Manager 
+				- It is reponsible to run the pods/containers in its' desired state.
+				- Ensure High Availability by creating replicas.	
+				
+			Deployment Controller Object 
+			
+				- It is used create replicas of pods using Replicaset
+				
+				- It is responsible to run the pods in its' desired state.
+				
+				- It helps to scale-up or scale-down the pods 
+				
+				- It helps to upgrade or rollback the changes without any downtime.
+				
+				- It uses Rolling-Update Deployment Strategy to ensure Zero Downtime.
+				
+				
+			
+	Environments :
+	
+		Non-Prod Environments ::				Production Environments (LIVE)
+		
+		Dev 										Prod Server1,2,3,4,5
+		
+		Build 
+		
+		QA 
+		
+		UAT 
+
+		
+		Kubernetes_Cluster 
+			Kubernetes_WorkerNode1,2,3,4,5
+			
+			deploy a copy pod 
+			
+			Replicaset --> Create the copies of pods : replica = 3
+			
+			
+		E_Commerce Portal :: / Online Ticket Booking System 
+		
+		
+		1000 Users to access in parallel
+		10000 
+		
+		
+		10 replicas of pods to support 1000 users 
+		
+		Scale up the Pod instances 
+		
+		Pod --> mywebapp_img:v1.0  ---> 5 Replicas of Pod 
+		
+		mywebapp_img:v1.0   	===> 	mywebapp_img:v1.1
+		
+		
+		Upgrade :::
+		
+		Rolling-Update Deployment Strategy  --> Is a default Strategy for deployment.
+		
+		mywebapp_img:v1.0		===> 	mywebapp_img:v1.1
+		
+		pod_1.1							pod_2.1
+		
+		pod_1.2							pod_2.1
+		
+		pod_1.3							pod_2.1
+		
+		
+	1. Create Deployment Controller Object 
+	
+		- Create Deployment Object 
+		
+		- Create Replicaset 
+		
+		- Create Pod Instances based on Replicas
+	
+	
+	
+	Namespace :
+	
+		- It is a logical partition of the cluster.
+		
+		
+		QA_Server for deployment 		- Test Environment
+		
+		
+	Kubernetes Volume :
+	
+		Hostpath Volume :::
+		
+	
+Kubernetes Services :::
+
+	NodePort Service 		# Used to expose the Pod to internet
+	
+	ClusterIP Service 		# Used for internal communication between the pods within the cluster
+	
+		Front-End Pod     <====>		 Back-End Pod 
+						Cluster-IP
+						
+						
+	Load Balancer Service 	# Used to access the Web Application using one end-point url
+	
+Next : Demo 
+
+	Demo of Pod Deployment using Deployment Controller Object and NodePort Service 
+	
+	- Java Springboot Application 
+	
+		- build 
+		
+		- create artifacts 
+		
+		- create docker image
+		
+		- push to dockerhub 
+		
+		- Deploy to Kubernetes Cluster using Deployment Controller Object and NodePort Service
+		
+		
+	CICD Pipeline.
+
+######################
+Day 8 - 19th June 2024
+######################
+
+
+	Implement Docker and Kubernetes into DevOps Workflow :::
+	
+	CICD ::
+	
+	git/jenkins/docker/kubernetes 	==> CICD Pipeline - to automate the build and deployment.
+
+
+
+	1. Developers Create the Source Code 
+	
+	2. Commit the Source_Code to Source_Code Repository(Github)
+	
+	3. Jenkins_pipeline  ---> for Monolith Application Architecture
+		- SCM_Checkout - Download the source_code to build server
+		- Application_Build - Process of compiling the source code and create artifacts(Binaries - *.war/*.jar) 
+		- Deploy the artifacts to Target Server(QA/UAT/PROD) 
+		
+			Jenkins_Master
+				Jenkins_Slave
+			Tomcat_Server		Target Server 
+			
+	3.1 Jenkins Pipeline ---> for Containerized - Micro-Service Based Application Architecture
+	
+		- SCM_Checkout 
+		- Application_Build using Maven 
+		- Application Image Build using Docker 
+		- Published to Container Registry(Dockerhub)
+		- Deploy the Container Image in the Target Server and run the Application using Container.
+	
+	Project Workflow :
+	
+	- Jenkins Pipeline ---> for Containerized - Micro-Service Based Application Architecture
+	
+		- 
+		SCM_Checkout 
+		- Application_Build using Maven 
+		- Application Image Build using Docker 
+		- Published to Container Registry(Dockerhub)
+		- Deploy the Container Image in the Target Server and run the Application using Container.
+	
+	- How to Onboard any Application to DevOps CICD Process :
+	
+		- DevOps Assessment
+	
+	
+	- Implement DevOps ::
+	
+		- Java Maven Web Application --> 
+		
+		
+	- Create CICD Pipeline :::
+	
+		- It composed of various stages to automate builds and deployments
+	
+	
+	- Jenkins CICD Pipeline Stages :::
+
+		- SCM_Checkout 
+		- Application_Build using Maven 
+		- Application Image Build using Docker 
+		- Published to Container Registry(Dockerhub)
+		- Deploy the Container Image in the Kubernetes Cluster
+		
+	- How to Create Jenkins CICD Pipeline to automate builds and deployments for Java Web Application ?
+	
+	
+		Infra-Structure to Create CICD Pipeline - (VMs) 
+		
+			Jenkins_Master 					-->	Create Jenkins CICD Pipeline Projects and Schedule it to run in the Slave Node
+				Jenkins_Slave(Build_Server)	--> Perform Application Build and Create Artifacts(Binaries - executables - *.war/*.jar)
+												Build Application Image 
+			Kubernetes_Master				--> Schedule to Deploy the Application Images  # Target Environment
+				Kubernetes_WorkerNode1
+				Kubernetes_WorkerNode2
+		
+		Tools ::	https://www.jenkins.io/doc/book/installing/linux/
+		
+			Jenkins_Master (VM)						--->	jdk, jenkins, git  
+				Jenkins_Slave(Build_Server) (VM)	--->	git, jdk, maven, Docker_Engine
+											
+			Kubernetes_Master (VM)					---> 	All Kubernetes Components 				
+				Kubernetes_WorkerNode1 (VM)
+				Kubernetes_WorkerNode2 (VM)
+	
+	
+		Integrate Jenkins Slave_Node with Jenkins_Master
+		
+		Integrate Kubernetes_Master with Jenkins 
+	
+	- Jenkins CICD Pipeline :::
+	
+	
+	SCM_Checkout ---> Build Application Artifacts & Unit_Testing ---> Build Docker Application Image ---> Publish App_Img to DockerHub ---> Deploy to Kubernetes Cluster
+		
+	
+	- DevOps CICD Pipeline Trigger/Execution WorkFlow :::
+	
+		Developers' Role :
+		
+			1. In Dev Environment, Developers use IDEs like (Eclipse/Visual Studio/Visual Studio Code/Pycharm)
+			
+			2. Push the Source Code Changes to Remote Repository(Github) thru IDEs 
+		
+		Thru DevOps Automation :
+		
+			3. GITHUB Webhook to Trigger the CICD Pipeline
+			
+			4. - SCM_Checkout 
+			   - Application_Build using Maven 
+			   - Application Image Build using Docker 
+	           - Published to Container Registry(Dockerhub)
+	           - Deploy the Container Image in the Kubernetes Cluster
+			   
+			5. Email Notification to Users Through Jenkins Pipeline 
+
+
+	Implementation ::::
+
+		Jenkins_Master (VM)					
+	    	Jenkins_Slave(Build_Server) (VM)
+	    								
+	    Kubernetes_Master (VM)				
+			Kubernetes_WorkerNode1 (VM)
+	    	Kubernetes_WorkerNode2 (VM)
+			
+			
+			
+	Understanding Source Code Repository :::
+	
+		- src 
+		
+		- pom.xml		# Define the dependencies and plugins required to build java mvn application
+		
+		- Dockerfile 	# Used to define the properties of Application and its dependencies to Build Application Image
+		
+		- kubernetes manifest file - *.yaml
+						# Used to Create Deployment Controller Object and NodePort Service
+						
+	
+pipeline {
+
+    agent { label 'slave1' }
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	}
+	
+    stages {
+        stage('SCM_Checkout ') {
+            steps {
+                echo 'Perform SCM Checkout'
+                git 'https://github.com/SA-DevOps-June24/devops-javamvn-webapp.git'
+            }
+        }
+        stage('Application Build') {
+            steps {
+                echo 'Perform Application Build'
+                sh 'mvn clean package'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+				sh 'docker version'
+				sh "docker build -t loksaieta/loksai-eta-app:${BUILD_NUMBER} ."
+				sh 'docker image list'
+				sh "docker tag loksaieta/loksai-eta-app:${BUILD_NUMBER} loksaieta/loksai-eta-app:latest"
+            }
+        }
+		stage('Login2DockerHub') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+		stage('Publish_to_Docker_Registry') {
+			steps {
+				sh "docker push loksaieta/loksai-eta-app:latest"
+			}
+		}
+		
+	}
+}
+
+
+######################
+Day 9 - 21st June 2024
+######################
+		
+		Infra-Structure to Create CICD Pipeline - (VMs) 
+		
+			Jenkins_Master 					-->	Create Jenkins CICD Pipeline Projects and Schedule it to run in the Slave Node
+				Jenkins_Slave(Build_Server)	--> Src_Code Repo.
+												Perform Application Build and Create Artifacts(Binaries - executables - *.war/*.jar)
+												Build Application Image 
+
+			Kubernetes_Master				--> Schedule to Deploy the Application Images  # Target Environment
+				Kubernetes_WorkerNode1
+				Kubernetes_WorkerNode2
+	
+		
+		
+		
+		
+		kubectl create -f <file_name>.yaml			# This Command should be executed in Kubernetes_Master 
+		
+			Thru Jenkins - How to copy the files/artifacts to remote machines 
+			
+			Publish Over SSH Plugins
+			
+			
+			Install Publish Over SSH Plugins in Jenkins Master Node 
+			
+			Using this plugins Connect to Kubernetes Master and Copy the Manifest File to Kubernetes Master
+			
+			SSH Connection :::
+			
+				Host_Name 
+				
+				User_Name 
+				
+				Credentials (Keys)
+			
+pipeline {
+
+    agent { label 'slave1' }
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	}
+	
+    stages {
+        stage('SCM_Checkout ') {
+            steps {
+                echo 'Perform SCM Checkout'
+                git 'https://github.com/SA-DevOps-June24/devops-javamvn-webapp.git'
+            }
+        }
+        stage('Application Build') {
+            steps {
+                echo 'Perform Application Build'
+                sh 'mvn clean package'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+				sh 'docker version'
+				sh "docker build -t loksaieta/loksai-eta-app:${BUILD_NUMBER} ."
+				sh 'docker image list'
+				sh "docker tag loksaieta/loksai-eta-app:${BUILD_NUMBER} loksaieta/loksai-eta-app:latest"
+            }
+        }
+		stage('Login2DockerHub') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+		stage('Publish_to_Docker_Registry') {
+			steps {
+				sh "docker push loksaieta/loksai-eta-app:latest"
+			}
+		}
+		stage('Deploy to Kubernetes_Cluster') {
+			steps {
+				script {
+					sshPublisher(publishers: [sshPublisherDesc(configName: 'Kubernetes_Cluster', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -f k8smvndeployment.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'k8smvndeployment.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+				}				
+			}
+		}
+	}
+}
+			
+			
+			
+		kubectl create -f k8smvndeployment.yaml	
+		
+		kubectl apply -f k8smvndeployment.yaml	
+		
+			
+	- DevOps CICD Pipeline Trigger/Execution WorkFlow :::
+	
+		Developers' Role :
+		
+			1. In Dev Environment, Developers use IDEs like (Eclipse/Visual Studio/Visual Studio Code/Pycharm)
+			
+			2. Push the Source Code Changes to Remote Repository(Github) thru IDEs 
+		
+		Thru DevOps Automation :
+		
+			3. GITHUB Webhook to Trigger the CICD Pipeline
+			
+			4. - SCM_Checkout 
+			   - Application_Build using Maven 
+			   - Application Image Build using Docker 
+	           - Published to Container Registry(Dockerhub)
+	           - Deploy the Container Image in the Kubernetes Cluster			
+			
+			
